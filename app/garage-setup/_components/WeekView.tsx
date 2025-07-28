@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 /**
  * Week View Component
@@ -8,20 +8,20 @@
  * and quick actions for managing slots.
  */
 
-import type React from "react"
-import { ChevronLeft, ChevronRight, Settings, Calendar } from "lucide-react"
-import type { WeekDay } from "./types"
-import { BRAND_COLOR } from "./types"
-import { isToday, formatTimeToAmPm } from "./utils"
+import type React from "react";
+import { ChevronLeft, ChevronRight, Settings, Calendar } from "lucide-react";
+import type { WeekDay } from "./types";
+import { BRAND_COLOR } from "./types";
+import { isToday, formatTimeToAmPm } from "./utils";
 
 interface WeekViewProps {
-  currentWeekIndex: number
-  currentWeekData: WeekDay[]
-  selectedCalendarDate: string | null
-  loading: boolean
-  onPreviousWeek: () => void
-  onNextWeek: () => void
-  onManageSlots: (date: string) => void
+  currentWeekIndex: number;
+  currentWeekData: WeekDay[];
+  selectedCalendarDate: string | null;
+  loading: boolean;
+  onPreviousWeek: () => void;
+  onNextWeek: () => void;
+  onManageSlots: (date: string) => void;
 }
 
 export const WeekView: React.FC<WeekViewProps> = ({
@@ -36,40 +36,47 @@ export const WeekView: React.FC<WeekViewProps> = ({
   const getAvailabilityColor = (availability: WeekDay["availability"]) => {
     switch (availability.type) {
       case "working":
-        return BRAND_COLOR // Green
+        return BRAND_COLOR; // Green
       case "weekend":
-        return "#f59e0b" // Yellow/Amber
+        return "#ef4444"; // Red (FIXED: was yellow/amber)
       case "holiday":
-        return "#ef4444" // Red
+        return "#f59e0b"; // Yellow/Amber (FIXED: was red)
       default:
-        return "#6b7280" // Gray
+        return "#6b7280"; // Gray
     }
-  }
+  };
 
   const getAvailabilityText = (availability: WeekDay["availability"]) => {
     switch (availability.type) {
       case "working":
         if (availability.start_time && availability.end_time) {
-          return `${formatTimeToAmPm(availability.start_time)} - ${formatTimeToAmPm(availability.end_time)}`
+          return `${formatTimeToAmPm(
+            availability.start_time
+          )} - ${formatTimeToAmPm(availability.end_time)}`;
         }
-        return "Working Day"
+        return "Working Day";
       case "weekend":
         if (availability.start_time && availability.end_time) {
-          return `${formatTimeToAmPm(availability.start_time)} - ${formatTimeToAmPm(availability.end_time)}`
+          return `${formatTimeToAmPm(
+            availability.start_time
+          )} - ${formatTimeToAmPm(availability.end_time)}`;
         }
-        return "Weekend Hours"
+        return "Weekend Hours";
       case "holiday":
-        return availability.description || "Holiday"
+        return availability.description || "Holiday";
       default:
-        return "No Schedule"
+        return "No Schedule";
     }
-  }
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-lg text-white" style={{ backgroundColor: BRAND_COLOR }}>
+        <div
+          className="p-2 rounded-lg text-white"
+          style={{ backgroundColor: BRAND_COLOR }}
+        >
           <Calendar className="w-5 h-5" />
         </div>
         <div>
@@ -90,11 +97,20 @@ export const WeekView: React.FC<WeekViewProps> = ({
         </button>
 
         <div className="text-center">
-          <p className="text-sm font-medium text-gray-800">Week {currentWeekIndex + 1}</p>
+          <p className="text-sm font-medium text-gray-800">
+            Week {currentWeekIndex + 1}
+          </p>
           {currentWeekData.length > 0 && (
             <p className="text-xs text-gray-500">
-              {new Date(currentWeekData[0].date).toLocaleDateString("en-US", { month: "short", day: "numeric" })} -{" "}
-              {new Date(currentWeekData[6].date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+              {new Date(currentWeekData[0].date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              })}{" "}
+              -{" "}
+              {new Date(currentWeekData[6].date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              })}
             </p>
           )}
         </div>
@@ -112,31 +128,38 @@ export const WeekView: React.FC<WeekViewProps> = ({
       {/* Week Days */}
       <div className="space-y-3 max-h-[60vh] overflow-y-auto">
         {currentWeekData.map((dayData, index) => {
-          const isSelected = selectedCalendarDate === dayData.date
-          const isTodayDate = isToday(dayData.date)
-          const availabilityColor = getAvailabilityColor(dayData.availability)
+          const isSelected = selectedCalendarDate === dayData.date;
+          const isTodayDate = isToday(dayData.date);
+          const availabilityColor = getAvailabilityColor(dayData.availability);
 
           return (
             <div
               key={dayData.date}
-              className={`border rounded-lg p-3 md:p-4 transition-all ${
+              className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                 isSelected ? "ring-2 ring-opacity-50" : "hover:shadow-sm"
               } ${!dayData.isCurrentMonth ? "opacity-60" : ""}`}
               style={{
                 borderColor: isSelected ? availabilityColor : "#e5e7eb",
-                ringColor: isSelected ? availabilityColor : undefined,
               }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="text-center min-w-[50px] md:min-w-[60px]">
-                    <div className="text-xs md:text-sm font-medium text-gray-800">{dayData.day.slice(0, 3)}</div>
+                    <div className="text-xs md:text-sm font-medium text-gray-800">
+                      {dayData.day.slice(0, 3)}
+                    </div>
                     <div
                       className={`text-lg font-bold ${
                         isTodayDate ? "text-white" : "text-gray-700"
-                      } ${isTodayDate ? "rounded-full w-7 h-7 md:w-8 md:h-8 flex items-center justify-center mx-auto" : ""}`}
+                      } ${
+                        isTodayDate
+                          ? "rounded-full w-7 h-7 md:w-8 md:h-8 flex items-center justify-center mx-auto"
+                          : ""
+                      }`}
                       style={{
-                        backgroundColor: isTodayDate ? availabilityColor : undefined,
+                        backgroundColor: isTodayDate
+                          ? availabilityColor
+                          : undefined,
                       }}
                     >
                       {new Date(dayData.date).getDate()}
@@ -144,11 +167,16 @@ export const WeekView: React.FC<WeekViewProps> = ({
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium mb-1 truncate" style={{ color: availabilityColor }}>
+                    <div
+                      className="text-sm font-medium mb-1 truncate"
+                      style={{ color: availabilityColor }}
+                    >
                       {getAvailabilityText(dayData.availability)}
                     </div>
                     {dayData.availability.slot_duration && (
-                      <div className="text-xs text-gray-500">{dayData.availability.slot_duration} min slots</div>
+                      <div className="text-xs text-gray-500">
+                        {dayData.availability.slot_duration} min slots
+                      </div>
                     )}
                   </div>
                 </div>
@@ -176,16 +204,16 @@ export const WeekView: React.FC<WeekViewProps> = ({
                         dayData.availability.type === "working"
                           ? "100%"
                           : dayData.availability.type === "weekend"
-                            ? "60%"
-                            : dayData.availability.type === "holiday"
-                              ? "30%"
-                              : "0%",
+                          ? "60%"
+                          : dayData.availability.type === "holiday"
+                          ? "30%"
+                          : "0%",
                     }}
                   />
                 </div>
               </div>
             </div>
-          )
+          );
         })}
       </div>
 
@@ -194,12 +222,15 @@ export const WeekView: React.FC<WeekViewProps> = ({
           <div className="inline-flex items-center gap-2 text-sm text-gray-600">
             <div
               className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin"
-              style={{ borderColor: BRAND_COLOR, borderTopColor: "transparent" }}
+              style={{
+                borderColor: BRAND_COLOR,
+                borderTopColor: "transparent",
+              }}
             />
             Loading...
           </div>
         </div>
       )}
     </div>
-  )
-}
+  );
+};

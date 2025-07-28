@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 /**
  * Time Setting Modal Component
@@ -8,23 +8,23 @@
  * facilities for custom time settings.
  */
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import { X, Clock, Eye } from "lucide-react"
-import type { TimeSlot } from "./types"
-import { BRAND_COLOR } from "./types"
-import { generateTimeSlots, formatTimeToAmPm } from "./utils"
+import type React from "react";
+import { useState, useEffect } from "react";
+import { X, Clock, Eye } from "lucide-react";
+import type { TimeSlot } from "./types";
+import { BRAND_COLOR } from "./types";
+import { generateTimeSlots, formatTimeToAmPm } from "./utils";
 
 interface TimeSettingModalProps {
-  isOpen: boolean
-  onClose: () => void
-  timeSlots: TimeSlot[]
-  setTimeSlots: (slots: TimeSlot[]) => void
-  slotDuration: number
-  setSlotDuration: (duration: number) => void
-  loading: boolean
-  onSave: () => void
-  useCustomSlots: boolean // Declare the useCustomSlots variable
+  isOpen: boolean;
+  onClose: () => void;
+  timeSlots: TimeSlot[];
+  setTimeSlots: (slots: TimeSlot[]) => void;
+  slotDuration: number;
+  setSlotDuration: (duration: number) => void;
+  loading: boolean;
+  onSave: () => void;
+  useCustomSlots: boolean; // Declare the useCustomSlots variable
 }
 
 export const TimeSettingModal: React.FC<TimeSettingModalProps> = ({
@@ -38,36 +38,40 @@ export const TimeSettingModal: React.FC<TimeSettingModalProps> = ({
   onSave,
   useCustomSlots, // Use the useCustomSlots variable
 }) => {
-  const [startTime, setStartTime] = useState("09:00")
-  const [endTime, setEndTime] = useState("17:00")
-  const [previewSlots, setPreviewSlots] = useState<Array<{ start: string; end: string }>>([])
+  const [startTime, setStartTime] = useState("09:00");
+  const [endTime, setEndTime] = useState("17:00");
+  const [previewSlots, setPreviewSlots] = useState<
+    Array<{ start: string; end: string }>
+  >([]);
 
   // Initialize values when modal opens
   useEffect(() => {
     if (isOpen && timeSlots.length > 0) {
-      setStartTime(timeSlots[0].start)
-      setEndTime(timeSlots[timeSlots.length - 1].end)
+      setStartTime(timeSlots[0].start);
+      setEndTime(timeSlots[timeSlots.length - 1].end);
     }
-  }, [isOpen, timeSlots])
+  }, [isOpen, timeSlots]);
 
   // Generate preview slots when settings change
   useEffect(() => {
     if (startTime && endTime && slotDuration) {
-      const generated = generateTimeSlots(startTime, endTime, slotDuration)
-      setPreviewSlots(generated)
+      const generated = generateTimeSlots(startTime, endTime, slotDuration);
+      setPreviewSlots(generated);
     }
-  }, [startTime, endTime, slotDuration])
+  }, [startTime, endTime, slotDuration]);
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   const handleApplyGenerated = () => {
-    const generatedSlots = generateTimeSlots(startTime, endTime, slotDuration)
-    setTimeSlots(generatedSlots.map((slot) => ({ start: slot.start, end: slot.end })))
-  }
+    const generatedSlots = generateTimeSlots(startTime, endTime, slotDuration);
+    setTimeSlots(
+      generatedSlots.map((slot) => ({ start: slot.start, end: slot.end }))
+    );
+  };
 
   const isValidTimeRange = () => {
-    return startTime < endTime && previewSlots.length > 0
-  }
+    return startTime < endTime && previewSlots.length > 0;
+  };
 
   return (
     <div className="fixed inset-0 bg-black/80 bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -75,12 +79,20 @@ export const TimeSettingModal: React.FC<TimeSettingModalProps> = ({
         {/* Modal Header */}
         <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg text-white" style={{ backgroundColor: BRAND_COLOR }}>
+            <div
+              className="p-2 rounded-lg text-white"
+              style={{ backgroundColor: BRAND_COLOR }}
+            >
               <Clock className="w-5 h-5" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800">Set Working Hours</h3>
+            <h3 className="text-xl font-semibold text-gray-800">
+              Set Working Hours
+            </h3>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
@@ -91,17 +103,20 @@ export const TimeSettingModal: React.FC<TimeSettingModalProps> = ({
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Start Time
+                </label>
                 <input
                   type="time"
                   value={startTime}
                   onChange={(e) => setStartTime(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2"
-                  style={{ focusRingColor: BRAND_COLOR }}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">End Time</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  End Time
+                </label>
                 <input
                   type="time"
                   value={endTime}
@@ -114,10 +129,14 @@ export const TimeSettingModal: React.FC<TimeSettingModalProps> = ({
 
             {/* Slot Duration */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Appointment Slot Duration</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Appointment Slot Duration
+              </label>
               <select
                 value={slotDuration}
-                onChange={(e) => setSlotDuration(Number.parseInt(e.target.value))}
+                onChange={(e) =>
+                  setSlotDuration(Number.parseInt(e.target.value))
+                }
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2"
                 style={{ focusRingColor: BRAND_COLOR }}
               >
@@ -135,14 +154,20 @@ export const TimeSettingModal: React.FC<TimeSettingModalProps> = ({
               <div className="flex items-center gap-2 mb-3">
                 <Eye className="w-4 h-4" style={{ color: BRAND_COLOR }} />
                 <h4 className="font-medium text-gray-800">Slot Preview</h4>
-                <span className="text-sm text-gray-500">({previewSlots.length} slots)</span>
+                <span className="text-sm text-gray-500">
+                  ({previewSlots.length} slots)
+                </span>
               </div>
 
               {previewSlots.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-40 overflow-y-auto">
                   {previewSlots.map((slot, index) => (
-                    <div key={index} className="text-xs p-2 bg-gray-50 border border-gray-200 rounded text-center">
-                      {formatTimeToAmPm(slot.start)} - {formatTimeToAmPm(slot.end)}
+                    <div
+                      key={index}
+                      className="text-xs p-2 bg-gray-50 border border-gray-200 rounded text-center"
+                    >
+                      {formatTimeToAmPm(slot.start)} -{" "}
+                      {formatTimeToAmPm(slot.end)}
                     </div>
                   ))}
                 </div>
@@ -178,11 +203,13 @@ export const TimeSettingModal: React.FC<TimeSettingModalProps> = ({
 
           {!isValidTimeRange() && (
             <p className="text-sm text-red-600 text-center mt-2">
-              {!useCustomSlots ? "Please set valid start and end times" : "Please add at least one valid time slot"}
+              {!useCustomSlots
+                ? "Please set valid start and end times"
+                : "Please add at least one valid time slot"}
             </p>
           )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

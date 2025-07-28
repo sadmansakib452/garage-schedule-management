@@ -159,9 +159,9 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
       case "working":
         return BRAND_COLOR;
       case "weekend":
-        return "#f59e0b"; // amber-500
+        return "#ef4444"; // red-500 (FIXED: was amber-500)
       case "holiday":
-        return "#ef4444"; // red-500
+        return "#f59e0b"; // amber-500 (FIXED: was red-500)
       default:
         return "#f3f4f6"; // gray-100
     }
@@ -216,8 +216,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           <select
             value={selectedMonth}
             onChange={(e) => onMonthChange(Number.parseInt(e.target.value))}
-            className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2"
-            style={{ focusRingColor: BRAND_COLOR }}
+            className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
           >
             {MONTHS.map((month, index) => (
               <option key={index} value={index}>
@@ -229,8 +228,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           <select
             value={selectedYear}
             onChange={(e) => onYearChange(Number.parseInt(e.target.value))}
-            className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2"
-            style={{ focusRingColor: BRAND_COLOR }}
+            className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
           >
             {Array.from({ length: 10 }, (_, i) => selectedYear - 5 + i).map(
               (year) => (
@@ -300,7 +298,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                         : isSelected
                         ? `${availabilityColor}20`
                         : "transparent",
-                      ringColor: isSelected ? availabilityColor : undefined,
                     }}
                     disabled={!dayData.isCurrentMonth}
                   >
@@ -349,14 +346,16 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               onClick={onSetWeekend}
               className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm"
             >
-              <Home className="w-4 h-4 text-amber-500" />
+              <Home className="w-4 h-4 text-red-500" />{" "}
+              {/* FIXED: was amber-500 */}
               <span>Weekend</span>
             </button>
             <button
               onClick={onSetHoliday}
               className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm"
             >
-              <Gift className="w-4 h-4 text-red-500" />
+              <Gift className="w-4 h-4 text-amber-500" />{" "}
+              {/* FIXED: was red-500 */}
               <span>Holiday</span>
             </button>
           </div>
@@ -382,11 +381,13 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
             <span className="text-gray-600">Working</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded-full bg-amber-500" />
+            <div className="w-3 h-3 rounded-full bg-red-500" />{" "}
+            {/* FIXED: was amber-500 */}
             <span className="text-gray-600">Weekend</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded-full bg-red-500" />
+            <div className="w-3 h-3 rounded-full bg-amber-500" />{" "}
+            {/* FIXED: was red-500 */}
             <span className="text-gray-600">Holiday</span>
           </div>
         </div>
